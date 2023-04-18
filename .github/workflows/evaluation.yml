@@ -1,0 +1,42 @@
+name: Point Cloud Evaluation Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  classification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout datasets repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Checkout ground truth repository
+        uses: actions/checkout@v2
+        with:
+          repository: OpenDroneMap/ODMSemantic3D-validation
+          token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          path: ground-truth
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Run classification workflow
+        run: |
+          bash evaluation/run.sh
+        env:
+          GROUND_TRUTH_REPO_TOKEN: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+
+      - name: Run PR merged workflow
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          bash evaluation/pr_merged.sh
