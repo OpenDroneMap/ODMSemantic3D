@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Step 1: Download the latest release of the OPC repository
-wget https://github.com/uav4geo/OpenPointClass/releases/download/latest/opc.tar.gz
+#wget https://github.com/uav4geo/OpenPointClass/releases/download/latest/opc.tar.gz
+wget https://digipa.it/wp-content/uploads/opc.tar.gz
 tar -xzvf opc.tar.gz
 chmod +x pctrain pcclassify
 
