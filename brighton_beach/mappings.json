@@ -1,0 +1,17 @@
+{
+    "source": "https://www.stpls3d.com/data",
+    "classification": {
+        "0": "ground",
+        "1": "building",
+        "17": "building",
+        "2": "low_vegetation",
+        "3": "medium_vegetation",
+        "4": "high_vegetation",
+        "5": "human_made_object",
+        "6": "human_made_object",
+        "8": "human_made_object",
+        "15": "ground",
+        "18": "ground",
+        "19": "ground"
+    }
+}
