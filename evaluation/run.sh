@@ -6,8 +6,8 @@ wget https://digipa.it/wp-content/uploads/opc.tar.gz
 tar -xzvf opc.tar.gz
 chmod +x pctrain pcclassify
 
-# Step 2: Get the list of all point cloud file paths in the datasets repository
-DATASET_FILES=$(find . -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
+# Step 2: Get the list of all point cloud file paths in the datasets repository excluding the ground-truth folder
+DATASET_FILES=$(find . -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply" | grep -v "ground-truth")
 
 echo "Dataset Files: $DATASET_FILES"
 
@@ -32,8 +32,14 @@ echo "Ground Truth Files: $GROUND_TRUTH_FILES"
 
 # Step 7: Execute pcclassify for each point cloud from step 6 with the new-model.bin from step 4 and stats-file new-stats.json
 for FILE in $GROUND_TRUTH_FILES; do
+
   OUTPUT_FILE="${FILE%.*}_classified.${FILE##*.}"
-  ./pcclassify --regularization local_smooth --reg-radius $RADIUS --eval --stats-file new-stats.json $FILE $OUTPUT_FILE new-model.bin
+
+  # Calculate the new-stats.json file path
+  FOLDER=$(dirname $FILE)
+  NEW_STATS_FILE="${FOLDER}/new-stats.json"
+
+  ./pcclassify --regularization local_smooth --reg-radius $RADIUS --eval --stats-file $NEW_STATS_FILE $FILE $OUTPUT_FILE new-model.bin
 done
 
 # Step 8: Get the list of all new-stats.json file paths created in step 7 and existing stats.json file paths
@@ -66,11 +72,19 @@ COMMENT_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
 
 echo "Comment Payload: $COMMENT_PAYLOAD"
 
-curl -s -S -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data "$COMMENT_PAYLOAD" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+REQ_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+
+echo "Request URL: $REQ_URL"
+
+curl -s -S -H "Authorization: Bearer $GROUND_TRUTH_REPO_TOKEN" \
+           -H "Content-Type: application/json" \
+           -H "X-GitHub-Api-Version: 2022-11-28" \
+           -H "Accept: application/vnd.github+json" \
+           --data "$COMMENT_PAYLOAD" "$REQ_URL"
 
 # Step 12: Add new-model.bin to the PR
-git config --global user.email "github-action@example.com"
-git config --global user.name "GitHub Action"
+git config --global user.email "noreply@github.com"
+git config --global user.name "GitHub Actions"
 git add new-model.bin
 git commit -m "Add new-model.bin"
 git push origin HEAD:$GITHUB_HEAD_REF

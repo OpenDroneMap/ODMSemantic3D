@@ -14,26 +14,29 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Check if last commit was by GitHub Actions
         id: check
         run: |
-          LAST_COMMIT_AUTHOR=$(git log --format="%an" -n 1)
+          LAST_COMMIT_AUTHOR=$(git log --format="%an" -n 1 --no-merges)
+          echo "Last commit author: $LAST_COMMIT_AUTHOR"
           if [[ "$LAST_COMMIT_AUTHOR" == "GitHub Actions" ]]; then
-            echo "::set-output name=skip::true"
+            echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=skip::false"
+            echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
   classification:
     needs: check_commit_author
-    if: needs.check_commit_author.outputs.skip != 'true'
+    if: ${{ needs.check_commit_author.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout datasets repository
         uses: actions/checkout@v2
         with:
+          token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Checkout ground truth repository
@@ -52,6 +55,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y --fix-missing --no-install-recommends \
+            libtbb2 \
+            libboost-iostreams1.74.0 \
+            libboost-system1.74.0 \
+            libboost-serialization1.74.0 \
+            libpdal-base13 \
+            libgomp1
       - name: Run classification workflow
         run: |
           bash evaluation/run.sh
