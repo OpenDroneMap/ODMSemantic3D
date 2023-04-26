@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   check_commit_author:
@@ -74,3 +77,5 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           bash evaluation/pr_merged.sh
+        env:
+          GROUND_TRUTH_REPO_TOKEN: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
