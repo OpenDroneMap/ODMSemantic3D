@@ -29,12 +29,17 @@ jobs:
       - name: Bump version
         id: bump_version
         run: |
-          OLD_VERSION=$(bump2version --list --allow-dirty | grep current_version | sed -r s,"^.*=",,)
+          OLD_VERSION=$(cat VERSION)
           bump2version --commit --tag patch
-          NEW_VERSION=$(bump2version --list --allow-dirty | grep current_version | sed -r s,"^.*=",,)
+          NEW_VERSION=$(cat VERSION)
           echo "Old version: $OLD_VERSION"
           echo "New version: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Commit changes and tag
+        run: |
+          git commit -am "Bump version to $NEW_VERSION"
+          git tag -a "v$NEW_VERSION" -m "Bump version to $NEW_VERSION"
 
       - name: Push changes
         run: |
