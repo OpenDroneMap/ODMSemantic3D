@@ -1,29 +1,26 @@
 import argparse
 import json
 
+
 def read_json_file(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
     return data
 
+def safe(val):
+    return val if val is not None else 0
+
 def sum_data(data_sum, data):
     data_sum["accuracy"] += data["accuracy"]
     for label in data["labels"]:
         if label in data_sum["labels"]:
-
-            if data["labels"][label]["accuracy"] is not None:
-                data_sum["labels"][label]["accuracy"] += data["labels"][label]["accuracy"]
-
-            if data["labels"][label]["recall"] is not None:
-                data_sum["labels"][label]["recall"] += data["labels"][label]["recall"]
-
-            if data["labels"][label]["precision"] is not None:
-                data_sum["labels"][label]["precision"] += data["labels"][label]["precision"]
-
-            if data["labels"][label]["f1"] is not None:
-                data_sum["labels"][label]["f1"] += data["labels"][label]["f1"]
+            data_sum["labels"][label]["accuracy"] = safe(data_sum["labels"][label]["accuracy"]) + safe(data["labels"][label]["accuracy"])
+            data_sum["labels"][label]["recall"] = safe(data_sum["labels"][label]["recall"]) + safe(data["labels"][label]["recall"])
+            data_sum["labels"][label]["precision"] = safe(data_sum["labels"][label]["precision"]) + safe(data["labels"][label]["precision"])
+            data_sum["labels"][label]["f1"] = safe(data_sum["labels"][label]["f1"]) + safe(data["labels"][label]["f1"])
         else:
             data_sum["labels"][label] = data["labels"][label]
+
 
 def avg_data(data_sum, n):
     data_sum["accuracy"] /= n
@@ -33,16 +30,20 @@ def avg_data(data_sum, n):
         data_sum["labels"][label]["precision"] /= n
         data_sum["labels"][label]["f1"] /= n
 
+
 def safe_format(value, format_string="{:.2%}"):
     return format_string.format(value) if value is not None else "N/A"
 
+
 def print_table(baseline_data, target_data, data):
 
-    print("\n  Accuracy: {:.2%} vs {:.2%}".format(baseline_data["accuracy"], target_data["accuracy"]))
+    print("\n  Accuracy: {:.2%} vs {:.2%}".format(
+        baseline_data["accuracy"], target_data["accuracy"]))
     print("\n |               Label  |   Accuracy |     Recall |  Precision |         F1 |")
     print(" | -------------------- | ---------- | ---------- | ---------- | ---------- |")
 
-    all_labels = set(baseline_data["labels"].keys()) | set(target_data["labels"].keys())
+    all_labels = set(baseline_data["labels"].keys()) | set(
+        target_data["labels"].keys())
     for label in all_labels:
 
         d = data["labels"][label]
@@ -62,7 +63,8 @@ def print_table(baseline_data, target_data, data):
             print(" | {:20} | {:>10%} | {:>10} | {:>10} | {:>10} |".format(
                 label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
 
-        print(" |                      |            |            |            |            |")
+        print(
+            " |                      |            |            |            |            |")
 
 
 def compare(baseline, target):
@@ -79,9 +81,9 @@ def compare(baseline, target):
             bgs = baseline["labels"][label]
 
             comparison["labels"][label] = {key: (tgs[key] - bgs[key]) / bgs[key]
-                                                if bgs[key] != 0 and
-                                                   tgs[key] is not None and
-                                                   bgs[key] is not None else None
+                                           if bgs[key] != 0 and
+                                           tgs[key] is not None and
+                                           bgs[key] is not None else None
                                            for key in ["accuracy", "recall", "precision", "f1"]}
         else:
             comparison["labels"][label] = {key: None
@@ -97,7 +99,8 @@ def main(filenames):
         raise ValueError("Must provide an even number of filenames.")
 
     # Make files in pairs
-    filenames = [(filenames[i], filenames[i + 1]) for i in range(0, len(filenames), 2)]
+    filenames = [(filenames[i], filenames[i + 1])
+                 for i in range(0, len(filenames), 2)]
 
     baseline_data_sum = None
     target_data_sum = None
@@ -137,6 +140,7 @@ def main(filenames):
 
     print("\n**Average ({} datasets)**".format(pairs_cnt))
     print_table(baseline_data_sum, target_data_sum, comparison_sum)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
