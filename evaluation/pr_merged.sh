@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Replace model.bin with new-model.bin in the "datasets" repository
-mv new-model.bin model.bin
-git add model.bin
-git commit -m "Replace model.bin with new-model.bin"
-git push origin main
-
 # Zip the model.bin file and create a new release
 zip model.zip model.bin
 gh release create latest model.zip -t "Latest Model"

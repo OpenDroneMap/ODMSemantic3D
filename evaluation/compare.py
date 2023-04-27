@@ -1,7 +1,6 @@
 import argparse
 import json
 
-
 def read_json_file(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
@@ -11,10 +10,18 @@ def sum_data(data_sum, data):
     data_sum["accuracy"] += data["accuracy"]
     for label in data["labels"]:
         if label in data_sum["labels"]:
-            data_sum["labels"][label]["accuracy"] += data["labels"][label]["accuracy"]
-            data_sum["labels"][label]["recall"] += data["labels"][label]["recall"]
-            data_sum["labels"][label]["precision"] += data["labels"][label]["precision"]
-            data_sum["labels"][label]["f1"] += data["labels"][label]["f1"]
+
+            if data["labels"][label]["accuracy"] is not None:
+                data_sum["labels"][label]["accuracy"] += data["labels"][label]["accuracy"]
+
+            if data["labels"][label]["recall"] is not None:
+                data_sum["labels"][label]["recall"] += data["labels"][label]["recall"]
+
+            if data["labels"][label]["precision"] is not None:
+                data_sum["labels"][label]["precision"] += data["labels"][label]["precision"]
+
+            if data["labels"][label]["f1"] is not None:
+                data_sum["labels"][label]["f1"] += data["labels"][label]["f1"]
         else:
             data_sum["labels"][label] = data["labels"][label]
 
@@ -46,14 +53,14 @@ def print_table(baseline_data, target_data, data):
             td = target_data["labels"][label]
 
             print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                safe_format(bd["accuracy"]), safe_format(bd["recall"]), safe_format(bd["precision"]), safe_format(bd["f1"])))
+                safe_format(bd["accuracy"]), safe_format(bd["recall"]), safe_format(bd["precision"]), safe_format(bd["f1"], "{:.2f}")))
             print(" | {:20} | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                label, safe_format(td["accuracy"]), safe_format(td["recall"]), safe_format(td["precision"]), safe_format(td["f1"])))
+                label, safe_format(td["accuracy"]), safe_format(td["recall"]), safe_format(td["precision"]), safe_format(td["f1"], "{:.2f}")))
             print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
                 safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"])))
         else:
             print(" | {:20} | {:>10%} | {:>10} | {:>10} | {:>10} |".format(
-                label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"])))
+                label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
 
         print(" |                      |            |            |            |            |")
 
@@ -101,9 +108,16 @@ def main(filenames):
         baseline_data = read_json_file(baseline_filename)
         target_data = read_json_file(target_filename)
 
+        # get last folder name of baseline_filename
+        baseline_folder_name = baseline_filename.split("/")[-2]
+
+        # get last folder name of target_filename
+        target_folder_name = target_filename.split("/")[-2]
+
         comparison = compare(baseline_data, target_data)
-        print("\nComparison for {} vs {}: (Differences)".format(baseline_filename, target_filename))
+        print("\n<details><summary>Comparison for {} (Differences)</summary>\n".format(baseline_folder_name))
         print_table(baseline_data, target_data, comparison)
+        print("</details>")
 
         if baseline_data_sum is None:
             baseline_data_sum = baseline_data
@@ -121,7 +135,7 @@ def main(filenames):
     avg_data(target_data_sum, pairs_cnt)
     avg_data(comparison_sum, pairs_cnt)
 
-    print("\nAverage comparison for {} pairs:".format(pairs_cnt))
+    print("\n**Average ({} datasets)**".format(pairs_cnt))
     print_table(baseline_data_sum, target_data_sum, comparison_sum)
 
 if __name__ == "__main__":
