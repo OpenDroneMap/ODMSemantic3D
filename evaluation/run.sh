@@ -20,13 +20,15 @@ echo "SCALES: $SCALES"
 echo "RESOLUTION: $RESOLUTION"
 echo "RADIUS: $RADIUS"
 
-# Step 4: Execute pctrain on all point clouds from step 2 with the settings from step 3
+# Execute pctrain on all point clouds from step 2 with the settings from step 3
 ./pctrain --classifier gbt --scales $SCALES --resolution $RESOLUTION --radius $RADIUS --output new-model.bin $DATASET_FILES
 
 # Get the list of all point cloud file paths in the ground truth repository
 GROUND_TRUTH_FILES=$(find ground-truth -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
 
 echo "Ground Truth Files: $GROUND_TRUTH_FILES"
+
+NEW_STATS_FILES=""
 
 # Execute pcclassify for each point cloud from step 6 with the new-model.bin from step 4 and stats-file new-stats.json
 for FILE in $GROUND_TRUTH_FILES; do
@@ -37,5 +39,12 @@ for FILE in $GROUND_TRUTH_FILES; do
   FOLDER=$(dirname $FILE)
   NEW_STATS_FILE="${FOLDER}/new-stats.json"
 
+  echo "Classifying $FILE to $OUTPUT_FILE with $NEW_STATS"
+
+  NEW_STATS_FILES="$NEW_STATS_FILES $NEW_STATS_FILE"
+
   ./pcclassify --regularization local_smooth --reg-radius $RADIUS --eval --stats-file $NEW_STATS_FILE $FILE $OUTPUT_FILE new-model.bin
 done
+
+# Zip all new-stats.json files respecting paths
+zip -r new-stats.zip $NEW_STATS_FILES
