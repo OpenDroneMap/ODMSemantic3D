@@ -26,6 +26,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install bump2version
 
+      - name: Set up Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
       - name: Bump version
         id: bump_version
         run: |
@@ -36,14 +41,7 @@ jobs:
           echo "New version: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
-      - name: Commit changes and tag
-        run: |
-          git commit -am "Bump version to $NEW_VERSION"
-          git tag -a "v$NEW_VERSION" -m "Bump version to $NEW_VERSION"
-
       - name: Push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           git push
           git push --tags
