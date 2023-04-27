@@ -16,15 +16,13 @@ jobs:
           token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
           path: ground-truth
 
-      - name: Download model artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: new-model
+      - name: Download artifacts
+        run: |
+          ./download_artifact.sh ${{ github.repository_owner }} ${{ github.repository }} evaluation.yml model ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ./download_artifact.sh ${{ github.repository_owner }} ${{ github.repository }} evaluation.yml new-stats ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
 
-      - name: Download new stats artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: new-stats
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Unzip stats file
         run: |
