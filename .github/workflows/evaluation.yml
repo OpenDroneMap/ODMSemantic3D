@@ -4,12 +4,8 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 jobs:
-
   classification:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -64,70 +60,11 @@ jobs:
       - name: Upload model as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: new-model
-          path: new-model.bin
+          name: model
+          path: model.bin
 
       - name: Upload stats file as artifact
         uses: actions/upload-artifact@v3
         with:
           name: new-stats
           path: new-stats.zip
-
-
-  create_release:
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Checkout ground truth repository
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ secrets.GROUND_TRUTH_REPO }}
-        token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
-        path: ground-truth
-
-    - name: Download model artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: new-model
-
-    - name: Download new stats artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: new-stats
-
-    - name: Unzip stats file
-      run: unzip new-stats.zip
-
-    - name: Display structure of downloaded files
-      run: ls -R
-
-    - name: Replace and push new stats files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        find ground-truth -type f -iname "new-stats.json" -exec bash -c 'mv $0 ${0/new-/}' {} \;
-        git add ground-truth
-        git commit -m "Replace stats.json with new-stats.json"
-        git push origin main
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: Description of the release
-        draft: false
-        prerelease: false
-
-    - name: Upload file to release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: new-model.bin
-        asset_name: new-model.bin
-        asset_content_type: text/plain
