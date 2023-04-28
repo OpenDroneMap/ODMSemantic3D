@@ -71,13 +71,21 @@ ARTIFACT_DOWNLOAD_URL=$(curl --silent --request GET \
 
 echo "Artifact download URL: $ARTIFACT_DOWNLOAD_URL"
 
+# Create a random string of 8 path-safe characters
+RANDOM_STRING=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+
+TMP_ARTIFACT_NAME="$ARTIFACT_NAME-$RANDOM_STRING.zip"
+
 # Download the artifact
 curl --silent --show-error --location \
      --header "Authorization: Bearer $TOKEN" \
-     --output $ARTIFACT_NAME.zip $ARTIFACT_DOWNLOAD_URL
+     --output /tmp/$TMP_ARTIFACT_NAME $ARTIFACT_DOWNLOAD_URL
 
-# Extract the artifact (assuming it's a .zip file)
-unzip -o $ARTIFACT_NAME.zip
-rm $ARTIFACT_NAME.zip
+# List contents of zip file
+unzip -l /tmp/$TMP_ARTIFACT_NAME
+
+# Extract the artifact in the current folder and remove the zip file
+unzip -q -o /tmp/$TMP_ARTIFACT_NAME -d .
+rm -rf /tmp/$TMP_ARTIFACT_NAME
 
 echo "Extracted artifact: $ARTIFACT_NAME"
