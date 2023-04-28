@@ -54,6 +54,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Checkout ground truth repository
         uses: actions/checkout@v2
@@ -82,7 +84,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add .
-          git commit -m "Replace stats.json with new-stats.json"
+          git commit -m "Statistics update"
           git push origin main
 
       - name: Get latest tag and save it to env variable
@@ -90,25 +92,15 @@ jobs:
           LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: v${{ env.LATEST_TAG }}
-          body: |
-            New model trained on ${{ github.repository }}
+          name: ${{ env.LATEST_TAG }}
+          tag_name: ${{ env.LATEST_TAG }}
           draft: false
           prerelease: false
+          body: |
+            New model trained on ${{ github.repository }}
+          files: |
+            model.bin
 
-      - name: Upload file to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: model.bin
-          asset_name: model.bin
-          asset_content_type: text/plain
