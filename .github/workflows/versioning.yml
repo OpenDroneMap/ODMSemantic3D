@@ -5,6 +5,7 @@ on:
     types:
       - closed
 
+
 jobs:
   versioning_and_release:
     if: github.event.pull_request.merged == true
