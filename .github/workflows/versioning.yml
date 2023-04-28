@@ -58,8 +58,8 @@ jobs:
       - name: Download artifacts
         run: |
           chmod +x evaluation/download_artifact.sh
-          ./evaluation/download_artifact.sh ${{ github.repository_owner }} ${{ github.repository }} evaluation.yml model ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
-          ./evaluation/download_artifact.sh ${{ github.repository_owner }} ${{ github.repository }} evaluation.yml new-stats ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ./evaluation/download_artifact.sh ${{ github.repository }} evaluation.yml model ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ./evaluation/download_artifact.sh ${{ github.repository }} evaluation.yml new-stats ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
 
       - name: Display structure of downloaded files
         run: ls -R
