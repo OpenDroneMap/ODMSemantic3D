@@ -1,4 +1,4 @@
-name: Versioning
+name: Versioning and release
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - closed
 
 jobs:
-  versioning:
+  versioning_and_release:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -47,11 +47,6 @@ jobs:
           github_token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
           tags: true
 
-  create_release:
-    runs-on: ubuntu-latest
-    needs: versioning
-    if: github.event.pull_request.merged == true
-    steps:
       - name: Checkout ground truth repository
         uses: actions/checkout@v2
         with:
@@ -80,7 +75,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           find ground-truth -type f -iname "new-stats.json" -exec bash -c 'mv $0 ${0/new-/}' {} \;
-          git add ground-truth
+          cd ground-truth
+          git add .
           git commit -m "Replace stats.json with new-stats.json"
           git push origin main
 
