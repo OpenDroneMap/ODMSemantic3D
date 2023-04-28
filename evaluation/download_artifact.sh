@@ -33,7 +33,7 @@ if [ -z "$TOKEN" ]; then
   exit 1
 fi
 
-# Ensure required curl, jq and unzip commands are available
+# Ensure required curl, jq, unzip, tr, fold, head commands are available
 if ! command -v curl &> /dev/null; then
   echo "curl could not be found"
   exit 1
@@ -48,6 +48,22 @@ if ! command -v unzip &> /dev/null; then
   echo "unzip could not be found"
   exit 1
 fi
+
+if ! command -v tr &> /dev/null; then
+  echo "tr could not be found"
+  exit 1
+fi
+
+if ! command -v fold &> /dev/null; then
+  echo "fold could not be found"
+  exit 1
+fi
+
+if ! command -v head &> /dev/null; then
+  echo "head could not be found"
+  exit 1
+fi
+
 
 echo "Downloading artifact \"$ARTIFACT_NAME\" from workflow \"$WORKFLOW_NAME\" of \"$REPO\""
 
@@ -72,7 +88,7 @@ ARTIFACT_DOWNLOAD_URL=$(curl --silent --show-error --request GET \
 echo "Artifact download URL: $ARTIFACT_DOWNLOAD_URL"
 
 # Create a random string of 8 path-safe characters
-RANDOM_STRING=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+RANDOM_STRING=$(dd if=/dev/urandom bs=1 count=64 | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 
 TMP_ARTIFACT_NAME="$ARTIFACT_NAME-$RANDOM_STRING.zip"
 
