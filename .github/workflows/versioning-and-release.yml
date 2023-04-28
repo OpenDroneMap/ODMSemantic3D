@@ -71,19 +71,15 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - name: Unzip stats file
+      - name: Unzip stats archive and replace old stats file
         run: |
-          unzip new-stats.zip -d /tmp
-          unzip /tmp/new-stats/new-stats.zip -d .
-
-      - name: Display structure of downloaded files
-        run: ls -R
+          unzip new-stats.zip
+          find ground-truth -type f -iname "new-stats.json" -exec bash -c 'mv $0 ${0/new-/}' {} \;
 
       - name: Replace and push new stats files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          find ground-truth -type f -iname "new-stats.json" -exec bash -c 'mv $0 ${0/new-/}' {} \;
           cd ground-truth
           git add .
           git commit -m "Replace stats.json with new-stats.json"
