@@ -5,9 +5,8 @@ on:
     types:
       - closed
 
-
 jobs:
-  versioning_and_release:
+  versioning:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -48,6 +47,14 @@ jobs:
           github_token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
           tags: true
 
+  release:
+    needs: versioning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Checkout ground truth repository
         uses: actions/checkout@v2
         with:
@@ -55,7 +62,7 @@ jobs:
           token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
           path: ground-truth
 
-      - name: Download artifacts
+      - name: Download new model and stats files
         run: |
           chmod +x evaluation/download_artifact.sh
           ./evaluation/download_artifact.sh ${{ github.repository }} evaluation.yml model ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
