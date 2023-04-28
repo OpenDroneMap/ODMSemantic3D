@@ -1,7 +1,6 @@
 import argparse
 import json
 
-
 def read_json_file(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
