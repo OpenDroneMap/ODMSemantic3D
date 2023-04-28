@@ -52,7 +52,7 @@ fi
 echo "Downloading artifact \"$ARTIFACT_NAME\" from workflow \"$WORKFLOW_NAME\" of \"$REPO\""
 
 # Get the latest workflow run ID for the specific workflow
-RUN_ID=$(curl --silent --request GET \
+RUN_ID=$(curl --silent --show-error --request GET \
   --url "https://api.github.com/repos/$REPO/actions/workflows/$WORKFLOW_NAME/runs" \
   --header "Accept: application/vnd.github+json" \
   --header "X-GitHub-Api-Version: 2022-11-28" \
@@ -62,7 +62,7 @@ RUN_ID=$(curl --silent --request GET \
 echo "Run ID: $RUN_ID"
 
 # Get the artifact download URL for the specific artifact
-ARTIFACT_DOWNLOAD_URL=$(curl --silent --request GET \
+ARTIFACT_DOWNLOAD_URL=$(curl --silent --show-error --request GET \
   --url "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID/artifacts" \
   --header "Accept: application/vnd.github+json" \
   --header "X-GitHub-Api-Version: 2022-11-28" \
