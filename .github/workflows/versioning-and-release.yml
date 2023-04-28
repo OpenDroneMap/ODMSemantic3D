@@ -85,6 +85,11 @@ jobs:
           git commit -m "Replace stats.json with new-stats.json"
           git push origin main
 
+      - name: Get latest tag and save it to env variable
+        run: |
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -92,8 +97,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: Description of the release
+          release_name: v${{ env.LATEST_TAG }}
+          body: |
+            New model trained on ${{ github.repository }}
           draft: false
           prerelease: false
 
@@ -103,6 +109,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: new-model.bin
-          asset_name: new-model.bin
+          asset_path: model.bin
+          asset_name: model.bin
           asset_content_type: text/plain
