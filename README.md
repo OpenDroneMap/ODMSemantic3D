@@ -8,9 +8,16 @@ This repository contains the classified point clouds for training the OpenPointC
 You can easily classify your own point cloud using [CloudCompare](https://www.danielgm.net/cc/). To do so, you need to follow the next steps:
 - Open your point cloud in CloudCompare
 - Check for field `Properties > Scalar field > Classification`. Otherwise you can add it by going to `Edit > Add scalar field > Classification`
+
+![add-scalar-field](https://user-images.githubusercontent.com/7868983/235640470-5986f162-4adf-45db-934e-cc8fe65c5a9b.gif)
+
 - Start classifying by going to `Edit > Segment` (or just press T)
 - Create a poligon you want to classify. Right click to close it.
 - Press C to assign a class
+
+![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
+
+
 - Once you are done, you can export the point cloud by going to `File > Save as...` and selecting the `.laz` format (not version 1.3 or 1.4)
 
 Optionally create a json with the same name as the point cloud with the following format:
