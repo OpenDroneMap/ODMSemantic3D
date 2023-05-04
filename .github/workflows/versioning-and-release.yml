@@ -1,0 +1,106 @@
+name: Versioning and release
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  versioning:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install bump2version
+        run: |
+          python -m pip install --upgrade pip
+          pip install bump2version
+
+      - name: Set up Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          OLD_VERSION=$(cat VERSION)
+          bump2version --commit --tag patch
+          NEW_VERSION=$(cat VERSION)
+          echo "Old version: $OLD_VERSION"
+          echo "New version: $NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          tags: true
+
+  release:
+    needs: versioning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Checkout ground truth repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ secrets.GROUND_TRUTH_REPO }}
+          token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          path: ground-truth
+
+      - name: Download new model and stats files
+        run: |
+          chmod +x evaluation/download_artifact.sh
+          ./evaluation/download_artifact.sh ${{ github.repository }} evaluation.yml model ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ./evaluation/download_artifact.sh ${{ github.repository }} evaluation.yml new-stats ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Unzip stats archive and replace old stats file
+        run: |
+          unzip new-stats.zip
+          find ground-truth -type f -iname "new-stats.json" -exec bash -c 'mv $0 ${0/new-/}' {} \;
+
+      - name: Replace and push new stats files
+        run: |
+          cd ground-truth
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add .
+          git commit -m "Statistics update"
+          git push origin main
+
+      - name: Get latest tag and save it to env variable
+        run: |
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ env.LATEST_TAG }}
+          tag_name: ${{ env.LATEST_TAG }}
+          draft: false
+          prerelease: false
+          body: |
+            New model trained on ${{ github.repository }}
+          files: |
+            model.bin
+

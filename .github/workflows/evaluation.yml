@@ -1,0 +1,70 @@
+name: Point Cloud Evaluation Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  classification:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout datasets repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Checkout ground truth repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ secrets.GROUND_TRUTH_REPO }}
+          token: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+          path: ground-truth
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Upgrade pip
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y --fix-missing --no-install-recommends \
+            libtbb2 \
+            libboost-iostreams1.74.0 \
+            libboost-system1.74.0 \
+            libboost-serialization1.74.0 \
+            libpdal-base13 \
+            libgomp1 \
+            curl \
+            jq \
+            zip
+
+      - name: Run classification workflow
+        run: |
+          bash evaluation/run.sh
+        env:
+          GROUND_TRUTH_REPO_TOKEN: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+
+      - name: Comment in PR with results
+        run: |
+          bash evaluation/comment_stats.sh
+        env:
+          GROUND_TRUTH_REPO_TOKEN: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
+
+      - name: Upload model as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: model
+          path: model.bin
+
+      - name: Upload stats file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: new-stats
+          path: new-stats.zip
