@@ -70,7 +70,7 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 
 ![commit-changes](https://user-images.githubusercontent.com/7868983/236492735-6b6e2fe2-abee-46cb-9627-d05134c29f11.png)
 
-- Click on `compare across forks` and select `OpenDroneMap/ODMSemantic3D` repository as base fork and `main` as base branch. Add a title and a description for the pull request and click on `Create pull request`
+- Click on `compare across forks` and select `OpenDroneMap/ODMSemantic3D` repository as base and `main` as base branch. Add a title and a description for the pull request and click on `Create pull request`
 
 ![create-pull-request](https://user-images.githubusercontent.com/7868983/236492950-779cc623-44ed-44ae-b8d9-bf468e0d07b9.png)
 
