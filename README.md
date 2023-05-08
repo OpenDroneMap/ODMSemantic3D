@@ -37,7 +37,7 @@ Only If you used different numbers from those above, you have to create a json w
 ```
 
 ## Contribute
-You can contribute to this repository by adding new point clouds. To do so, you need to follow the these steps:
+You can contribute to this repository by adding new point clouds. To do so, you need to follow these steps:
 - [Register on github.com](https://github.com/signup) (if you haven't already)
 - Open the [ODMSemantic3D repository](https://github.com/OpenDroneMap/ODMSemantic3D)
 - Click on the **Fork** button in the top right corner
