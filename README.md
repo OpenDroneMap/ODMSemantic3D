@@ -13,16 +13,8 @@ You can easily classify your own point cloud using [CloudCompare](https://www.da
 
 - Start classifying by going to `Edit > Segment` (or just press T)
 
-- These classes are advised:
+- Create a polygon you want to classify. Right click to close it.
 
-  | Label | Number |
-  | ----------- | ----------- |
-  | ground | 1 |
-  | low_vegetation | 2 |
-  | building | 5 |
-  | human_made_object | 20 |
-
-- Create a poligon you want to classify. Right click to close it.
 - Press C to assign a class
 
 ![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
