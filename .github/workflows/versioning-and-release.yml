@@ -2,8 +2,14 @@ name: Versioning and release
 
 on:
   pull_request:
+    branches:
+      - main
     types:
       - closed
+    paths:
+      - '**.laz'
+      - '**.las'
+      - '**.ply'
 
 jobs:
   versioning:

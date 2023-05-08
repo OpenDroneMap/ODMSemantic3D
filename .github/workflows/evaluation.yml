@@ -4,11 +4,14 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '**.laz'
+      - '**.las'
+      - '**.ply'
 
 jobs:
   classification:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout datasets repository
         uses: actions/checkout@v2
