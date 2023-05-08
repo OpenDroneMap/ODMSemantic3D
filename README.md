@@ -12,7 +12,7 @@ You can easily classify your own point cloud using [CloudCompare](https://www.da
 ![add-scalar-field](https://user-images.githubusercontent.com/7868983/235640470-5986f162-4adf-45db-934e-cc8fe65c5a9b.gif)
 
 - Start classifying by going to `Edit > Segment` (or just press T)
-- Create a poligon you want to classify. Right click to close it.
+- Create a polygon you want to classify. Right click to close it.
 - Press C to assign a class
 
 ![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
