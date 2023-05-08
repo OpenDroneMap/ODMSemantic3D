@@ -58,7 +58,7 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 ![upload-files](https://user-images.githubusercontent.com/7868983/236491752-461552fa-0560-4c0f-b8df-515c5b930a40.png)
 
 - Upload the classified point cloud (supported formats are `.las`, `.laz` and `.ply`) by tragging them to the upload area or by clicking on `choose your files`.
-- Add a **commit message** and select `Create a new branch`, then click on `Commit changes`
+- Describe the point cloud you are adding in the **commit message** field and select `Create a new branch`, then click on `Commit changes`
 
 ![commit-changes](https://user-images.githubusercontent.com/7868983/236492735-6b6e2fe2-abee-46cb-9627-d05134c29f11.png)
 
