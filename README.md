@@ -37,14 +37,37 @@ Only If you used different numbers from those above, you have to create a json w
 ```
 
 ## Contribute
-You can contribute to this repository by adding new point clouds. To do so, you need to follow the next steps:
+You can contribute to this repository by adding new point clouds. To do so, you need to follow these steps:
 - [Register on github.com](https://github.com/signup) (if you haven't already)
-- Open "datasets" folder
-- Click on Add file -> Upload files
-- Upload the classified point cloud (supported formats are `.las`, `.laz` and `.ply`)
-- Open a pull request
-- CI will run the training automatically and will post the statistics in the pull request
-- If the PR is accepted, the point cloud will be added to the dataset and a new release of the model will be created
+- Open the [ODMSemantic3D repository](https://github.com/OpenDroneMap/ODMSemantic3D)
+- Click on the **Fork** button in the top right corner
+
+![create-fork](https://user-images.githubusercontent.com/132681251/236490639-a1a4e61a-558d-455c-84aa-b1b847a2ba48.png)
+
+- Create the fork in your account
+
+![create-fork-next](https://user-images.githubusercontent.com/132681251/236491057-dbfbe926-510e-49d1-8785-e7d7639f6642.png)
+
+- In your fork, open the `datasets` folder
+
+![click-on-datasets-folder](https://user-images.githubusercontent.com/132681251/236491397-cff1ad31-1727-4243-b728-2d20c9bc348e.png)
+
+
+- In the top right corner, click on `Add file -> Upload files`
+
+![upload-files](https://user-images.githubusercontent.com/7868983/236491752-461552fa-0560-4c0f-b8df-515c5b930a40.png)
+
+- Upload the classified point cloud (supported formats are `.las`, `.laz` and `.ply`) by tragging them to the upload area or by clicking on `choose your files`.
+- Add a **commit message** and select `Create a new branch`, then click on `Commit changes`
+
+![commit-changes](https://user-images.githubusercontent.com/7868983/236492735-6b6e2fe2-abee-46cb-9627-d05134c29f11.png)
+
+- Click on `compare across forks` and select `OpenDroneMap/ODMSemantic3D` repository as base and `main` as base branch. Add a title and a description for the pull request and click on `Create pull request`
+
+![create-pull-request](https://user-images.githubusercontent.com/7868983/236492950-779cc623-44ed-44ae-b8d9-bf468e0d07b9.png)
+
+- Github will run the training automatically and will post the statistics in the pull request as a comment.
+- If the PR is accepted, the point cloud will be added to the repository and a new release of the model will be created.
 
 ## Citation
 
