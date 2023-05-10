@@ -1,9 +1,0 @@
-{
-    "source": "https://github.com/pierotofy/drone_dataset_brighton_beach",
-    "classification": {
-        "2": "ground",
-        "3": "low_vegetation",
-        "64": "human_made_object",
-        "6": "building"
-    }
-}
