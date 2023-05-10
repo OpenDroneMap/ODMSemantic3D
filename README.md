@@ -15,26 +15,22 @@ You can easily classify your own point cloud using [CloudCompare](https://www.da
 
 - Create a polygon you want to classify. Right click to close it.
 
-- Press C to assign a class
+- Press C to assign one of these classes:
+
+| Class | Number | Description |
+--------|---------|-------------|
+| ground | 2 | Earth's surface such as soil, gravel, or pavement |  |
+| low_vegetation | 3 | Any generic type of vegetation like grass, bushes, shrubs, and trees |
+| building | 6 | Man-made structures such as houses, offices, and industrial buildings |
+| human_made_object | 64 | Any artificial objects not classified as buildings, such as vehicles, street furniture, or power lines |
+
+For the full list of classes, check [this link](https://github.com/uav4geo/OpenPointClass#supported-classes).
 
 ![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
 
-
 - Once you are done, you can export the point cloud by going to `File > Save as...` and selecting the `.laz` format (not version 1.3 or 1.4)
 
-Only If you used different numbers from those above, you have to create a json with the same name as the point cloud with the following format:
 
-```json
-{
-    "source": "[POINT CLOUD SOURCE URL]",
-    "classification": {
-        "2": "ground",
-        "3": "low_vegetation",
-        "64": "human_made_object",
-        "6": "building"
-    }
-}
-```
 
 ## Contribute
 You can contribute to this repository by adding new point clouds. To do so, you need to follow these steps:
@@ -51,7 +47,6 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 - In your fork, open the `datasets` folder
 
 ![click-on-datasets-folder](https://user-images.githubusercontent.com/132681251/236491397-cff1ad31-1727-4243-b728-2d20c9bc348e.png)
-
 
 - In the top right corner, click on `Add file -> Upload files`
 
