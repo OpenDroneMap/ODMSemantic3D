@@ -22,15 +22,11 @@ PR_COMMENT=$(python evaluation/compare.py $paired_files)
 
 echo "PR Comment: $PR_COMMENT"
 
-PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-
-echo "PR Number: $PR_NUMBER"
-
 COMMENT_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
 
 echo "Comment Payload: $COMMENT_PAYLOAD"
 
-REQ_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+REQ_URL=$(jq -r .pull_request.comments_url "$GITHUB_EVENT_PATH")
 
 echo "Request URL: $REQ_URL"
 
