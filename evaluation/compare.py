@@ -57,7 +57,7 @@ def print_table(baseline_data, target_data, data):
             print(" | {:20} | {:>10} | {:>10} | {:>10} | {:>10} |".format(
                 label, safe_format(td["accuracy"]), safe_format(td["recall"]), safe_format(td["precision"]), safe_format(td["f1"], "{:.2f}")))
             print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"])))
+                safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
         else:
             print(" | {:20} | {:>10%} | {:>10} | {:>10} | {:>10} |".format(
                 label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
@@ -79,7 +79,7 @@ def compare(baseline, target):
             tgs = target["labels"][label]
             bgs = baseline["labels"][label]
 
-            comparison["labels"][label] = {key: (tgs[key] - bgs[key]) / bgs[key]
+            comparison["labels"][label] = {key: (tgs[key] - bgs[key])
                                            if bgs[key] != 0 and
                                            tgs[key] is not None and
                                            bgs[key] is not None else None
@@ -110,11 +110,9 @@ def main(filenames):
         baseline_data = read_json_file(baseline_filename)
         target_data = read_json_file(target_filename)
 
+        folder_separator = "/" if "/" in baseline_filename else "\\"
         # get last folder name of baseline_filename
-        baseline_folder_name = baseline_filename.split("/")[-2]
-
-        # get last folder name of target_filename
-        target_folder_name = target_filename.split("/")[-2]
+        baseline_folder_name = baseline_filename.split(folder_separator)[-2]
 
         comparison = compare(baseline_data, target_data)
         print("\n<details><summary>Comparison for {} (Differences)</summary>\n".format(baseline_folder_name))
@@ -135,10 +133,11 @@ def main(filenames):
     # Average the sums
     avg_data(baseline_data_sum, pairs_cnt)
     avg_data(target_data_sum, pairs_cnt)
-    avg_data(comparison_sum, pairs_cnt)
+
+    comparison = compare(baseline_data_sum, target_data_sum)
 
     print("\n**Average ({} datasets)**".format(pairs_cnt))
-    print_table(baseline_data_sum, target_data_sum, comparison_sum)
+    print_table(baseline_data_sum, target_data_sum, comparison)
 
 
 if __name__ == "__main__":
