@@ -22,6 +22,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check for skip command
+        id: check_skip
+        env:
+          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_FULLNAME: ${{ github.repository }}
+          TEAM_SLUG: Semantic3D
+        run: |
+          chmod +x check_skip.sh
+          ./check_skip.sh $ISSUE_NUMBER $GITHUB_TOKEN $REPO_FULLNAME $TEAM_SLUG
+        continue-on-error: true
+
+      - name: Skip if necessary
+        id: skip_check
+        run: |
+          if [[ "${{ steps.check_skip.outcome }}" == "failure" ]]; then
+            echo "Skipping following steps..."
+            exit 0
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -31,6 +51,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install bump2version
+
+      - name: Fetch changed files and update JSON file
+        run: |
+          echo "Fetching changed files"
+          CHANGED_FILES=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} -- '*.laz' '*.las' '*.ply')
+          python evaluation/update_json.py evaluation/settings.json $CHANGED_FILES
 
       - name: Set up Git
         run: |
