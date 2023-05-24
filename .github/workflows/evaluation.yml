@@ -55,7 +55,7 @@ jobs:
 
       - name: Run classification workflow
         run: |
-          bash evaluation/run.sh
+          bash evaluation/run.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
         env:
           GROUND_TRUTH_REPO_TOKEN: ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
 
