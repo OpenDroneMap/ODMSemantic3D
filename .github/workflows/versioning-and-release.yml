@@ -26,7 +26,7 @@ jobs:
         id: check_skip
         run: |
           chmod +x check_skip.sh
-          ./check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
+          ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
         continue-on-error: true
 
       - name: Skip if necessary
