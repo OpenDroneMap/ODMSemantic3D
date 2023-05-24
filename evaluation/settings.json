@@ -2,12 +2,17 @@
     "scales": 5,
     "resolution": -1,
     "radius": 0.6,
-    "training_set": [],
+    "training_set": [
+        "datasets/odm_data_toledo.laz"
+    ],
     "training_classes": [
         2,
         3,
         6,
         64
     ],
-    "org_users": ["pierotofy", "HeDo88TH"]
+    "org_users": [
+        "pierotofy",
+        "HeDo88TH"
+    ]
 }
