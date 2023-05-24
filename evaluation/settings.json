@@ -1,5 +1,12 @@
 {
     "scales": 5,
     "resolution": -1,
-    "radius": 0.6
+    "radius": 0.6,
+    "training_set": [],
+    "training_classes": [
+        2,
+        3,
+        6,
+        64
+    ]
 }
