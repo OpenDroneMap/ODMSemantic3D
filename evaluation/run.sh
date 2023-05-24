@@ -40,6 +40,9 @@ TRAINING_SET=$(jq '.training_set' evaluation/settings.json)
 
 echo "Training set: $TRAINING_SET"
 
+# Convert the list of training set files to a space separated string
+TRAINING_SET=$(echo $TRAINING_SET | tr -d '[]' | tr -d ' ' | tr ',' ' ')
+
 # Merge the two lists
 DATASET_FILES="$DATASET_FILES $TRAINING_SET"
 
