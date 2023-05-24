@@ -1,7 +1,7 @@
 # ODMSemantic3D
 Open dataset of classified 3D points for semantic segmentation
 
-This repository contains the classified point clouds for training the OpenPointClass model. You can download the latest built model in the releases page.
+This repository contains the classified point clouds for training the OpenPointClass model. You can download the latest built model in the [releases](https://github.com/OpenDroneMap/ODMSemantic3D/releases) page.
 
 ## Classify your own point cloud
 
@@ -64,7 +64,7 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 ![create-pull-request](https://user-images.githubusercontent.com/7868983/236492950-779cc623-44ed-44ae-b8d9-bf468e0d07b9.png)
 
 - Github will run the training automatically and will post the statistics in the pull request as a comment.
-- If the PR is accepted, the point cloud will be added to the repository and a new release of the model will be created.
+- If the PR is accepted, the point cloud will be added to the repository and the new model will be published in a new release.
 
 ## Citation
 
