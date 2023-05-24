@@ -59,7 +59,7 @@ def print_table(baseline_data, target_data, data):
             print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
                 safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
         else:
-            print(" | {:20} | {:>10%} | {:>10} | {:>10} | {:>10} |".format(
+            print(" | {:20} | {:>10} | {:>10} | {:>10} | {:>10} |".format(
                 label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
 
         print(
