@@ -1,12 +1,13 @@
 #!/bin/bash
 
 ISSUE_NUMBER=$1
-GITHUB_TOKEN=$2
-REPO_FULLNAME=$3
-TEAM_SLUG=$4
+REPO_FULLNAME=$2
+TEAM_SLUG=$3
 
 # Get the commenters who have written '!skip'
 commenters=$(gh api repos/$REPO_FULLNAME/issues/$ISSUE_NUMBER/comments --paginate -q '.[] | select(.body == \"!skip\") | .user.login'
+
+echo "Commenters: $commenters"
 
 # Get the list of maintainers and developers
 team_members=$(gh api orgs/$(echo $REPO_FULLNAME | cut -f1 -d"/")/teams/$TEAM_SLUG/members --paginate -q '.[].login')
@@ -14,6 +15,9 @@ team_members=$(gh api orgs/$(echo $REPO_FULLNAME | cut -f1 -d"/")/teams/$TEAM_SL
 # Check if any of the commenters who wrote '!skip' are in the maintainers/developers list
 for commenter in $commenters; do
   if echo "$team_members" | grep -q "$commenter"; then
+
+    echo "Found !skip comment by $commenter"
+
     # Skip command found, exit with a special code
     exit 78
   fi
