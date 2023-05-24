@@ -11,14 +11,13 @@ on:
       - '**.las'
       - '**.ply'
 
-env:
-  SHOULD_CONTINUE: false
-
 jobs:
 
   check_skip:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    outputs:
+      should_continue: ${{ steps.check_skip.outputs.should_continue }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,12 +35,12 @@ jobs:
         run: |
           chmod +x evaluation/check_skip.sh
           ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
-          echo 'SHOULD_CONTINUE=true' >> $GITHUB_ENV
+          echo "should_continue=true" >> $GITHUB_OUTPUT
 
 
   versioning:
     needs: check_skip
-    if: github.env.SHOULD_CONTINUE == 'true'
+    if: needs.check_skip.outputs.should_continue == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -95,9 +94,9 @@ jobs:
 
 
   release:
-    needs: versioning
+    needs: [check_skip, versioning]
     runs-on: ubuntu-latest
-    if: github.env.SHOULD_CONTINUE == 'true'
+    if: needs.check_skip.outputs.should_continue == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
