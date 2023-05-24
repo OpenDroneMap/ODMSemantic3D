@@ -33,9 +33,14 @@ jobs:
         id: skip_check
         run: |
           if [[ "${{ steps.check_skip.outcome }}" == "failure" ]]; then
-            echo "Skipping following steps..."
-            exit 0
+            echo "Skipping new release"
+            exit 78
           fi
+
+      - name: Set up Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -53,10 +58,11 @@ jobs:
           CHANGED_FILES=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} -- '*.laz' '*.las' '*.ply')
           python evaluation/update_json.py evaluation/settings.json $CHANGED_FILES
 
-      - name: Set up Git
+      - name: Commit and push settings.json changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git add evaluation/settings.json
+          git commit -m "Update JSON file"
+          git push origin main
 
       - name: Bump version
         id: bump_version
