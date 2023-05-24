@@ -11,6 +11,9 @@ on:
       - '**.las'
       - '**.ply'
 
+env:
+  SHOULD_CONTINUE: false
+
 jobs:
 
   check_skip:
@@ -22,24 +25,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for skip command
+      - name: Check for !skip comment
         id: check_skip
         run: |
           chmod +x evaluation/check_skip.sh
           ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
-        continue-on-error: true
+          echo 'SHOULD_CONTINUE=true' >> $GITHUB_ENV
 
-      - name: Skip if necessary
-        id: skip_check
-        run: |
-          if [[ "${{ steps.check_skip.outcome }}" == "failure" ]]; then
-            echo "Skipping new release"
-            exit 78
-          fi
 
 
   versioning:
     needs: check_skip
+    if: env.SHOULD_CONTINUE == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -95,7 +92,7 @@ jobs:
   release:
     needs: versioning
     runs-on: ubuntu-latest
-
+    if: env.SHOULD_CONTINUE == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
