@@ -25,13 +25,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y --fix-missing --no-install-recommends \
+            curl \
+            jq \
+
       - name: Check for !skip comment
         id: check_skip
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           chmod +x evaluation/check_skip.sh
-          ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
+          ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D ${{ secrets.GROUND_TRUTH_REPO_TOKEN }}
           echo 'SHOULD_CONTINUE=true' >> $GITHUB_ENV
 
 
