@@ -15,7 +15,8 @@ chmod +x pctrain pcclassify
 #     "datasets/1.laz",
 #     "datasets/2.laz",
 #     "datasets/3.laz"
-#   ]
+#   ],
+#   "training_classes": [2, 3, 6, 64]
 # }
 
 
@@ -23,10 +24,12 @@ chmod +x pctrain pcclassify
 SCALES=$(jq '.scales' evaluation/settings.json)
 RESOLUTION=$(jq '.resolution' evaluation/settings.json)
 RADIUS=$(jq '.radius' evaluation/settings.json)
+TRAINING_CLASSES=$(jq '.training_classes' evaluation/settings.json)
 
 echo "SCALES: $SCALES"
 echo "RESOLUTION: $RESOLUTION"
 echo "RADIUS: $RADIUS"
+echo "TRAINING_CLASSES: $TRAINING_CLASSES"
 
 # Get the list of all added or edited point cloud file paths in the datasets repository excluding the ground-truth folder
 DATASET_FILES=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} -- '*.laz' '*.las' '*.ply' | grep -v "ground-truth")
@@ -42,8 +45,11 @@ DATASET_FILES="$DATASET_FILES $TRAINING_SET"
 
 echo "New training set: $DATASET_FILES"
 
+# Convert the list of training classes to a comma separated string
+TRAINING_CLASSES=$(echo $TRAINING_CLASSES | tr -d '[]' | tr -d ' ')
+
 # Execute pctrain on all point clouds with the provided settings
-./pctrain --classifier gbt --scales $SCALES --resolution $RESOLUTION --radius $RADIUS --output model.bin $DATASET_FILES
+./pctrain --classifier gbt --scales $SCALES --resolution $RESOLUTION --radius $RADIUS --output model.bin --classes $TRAINING_CLASSES $DATASET_FILES
 
 # Get the list of all point cloud file paths in the ground truth repository
 GROUND_TRUTH_FILES=$(find ground-truth -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
