@@ -27,6 +27,8 @@ jobs:
 
       - name: Check for !skip comment
         id: check_skip
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           chmod +x evaluation/check_skip.sh
           ./evaluation/check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
