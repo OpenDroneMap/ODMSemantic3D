@@ -5,7 +5,7 @@ REPO_FULLNAME=$2
 TEAM_SLUG=$3
 
 # Get the commenters who have written '!skip'
-commenters=$(gh api repos/$REPO_FULLNAME/issues/$ISSUE_NUMBER/comments --paginate -q '.[] | select(.body == \"!skip\") | .user.login'
+commenters=$(gh api repos/$REPO_FULLNAME/issues/$ISSUE_NUMBER/comments --paginate -q '.[] | select(.body == \"!skip\") | .user.login')
 
 echo "Commenters: $commenters"
 
