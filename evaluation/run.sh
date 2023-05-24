@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BASE_SHA=$1
+HEAD_SHA=$2
+
 # Download the latest release of the OPC repository
 latest_release_url=$(curl -s "https://api.github.com/repos/uav4geo/OpenPointClass/releases/latest" | jq -r '.assets[0].browser_download_url')
 wget $latest_release_url -O opc.tar.gz
@@ -32,7 +35,7 @@ echo "RADIUS: $RADIUS"
 echo "TRAINING_CLASSES: $TRAINING_CLASSES"
 
 # Get the list of all added or edited point cloud file paths in the datasets repository excluding the ground-truth folder
-DATASET_FILES=$(git diff --name-only --diff-filter=AMR ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} -- '*.laz' '*.las' '*.ply' | grep -v "ground-truth")
+DATASET_FILES=$(git diff --name-only --diff-filter=AMR $BASE_SHA..$HEAD_SHA -- '*.laz' '*.las' '*.ply' | grep -v "ground-truth")
 echo "New or edited files: $DATASET_FILES"
 
 # Get the training_set array from settings.json and merge with the list of all added or edited point cloud file paths
