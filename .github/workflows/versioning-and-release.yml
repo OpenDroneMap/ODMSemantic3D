@@ -24,14 +24,9 @@ jobs:
 
       - name: Check for skip command
         id: check_skip
-        env:
-          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_FULLNAME: ${{ github.repository }}
-          TEAM_SLUG: Semantic3D
         run: |
           chmod +x check_skip.sh
-          ./check_skip.sh $ISSUE_NUMBER $GITHUB_TOKEN $REPO_FULLNAME $TEAM_SLUG
+          ./check_skip.sh ${{ github.event.pull_request.number }} ${{ github.repository }} Semantic3D
         continue-on-error: true
 
       - name: Skip if necessary
