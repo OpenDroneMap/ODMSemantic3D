@@ -5,7 +5,9 @@ This repository contains the classified point clouds for training the OpenPointC
 
 ## Classify your own point cloud
 
-You can easily classify your own point cloud using [CloudCompare](https://www.danielgm.net/cc/). To do so, you need to follow the next steps:
+You can easily classify your own point cloud using [CloudCompare](https://www.danielgm.net/cc/). **Avoid alpha versions, use the last stable one (v2.12.4)**.
+
+Just follow the next steps:
 - Open your point cloud in CloudCompare
 - Check for field `Properties > Scalar field > Classification`. Otherwise you can add it by going to `Edit > Add scalar field > Classification`
 
