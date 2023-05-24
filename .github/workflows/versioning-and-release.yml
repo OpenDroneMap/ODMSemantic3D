@@ -33,10 +33,9 @@ jobs:
           echo 'SHOULD_CONTINUE=true' >> $GITHUB_ENV
 
 
-
   versioning:
     needs: check_skip
-    if: env.SHOULD_CONTINUE == 'true'
+    if: github.env.SHOULD_CONTINUE == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -92,7 +91,7 @@ jobs:
   release:
     needs: versioning
     runs-on: ubuntu-latest
-    if: env.SHOULD_CONTINUE == 'true'
+    if: github.env.SHOULD_CONTINUE == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
