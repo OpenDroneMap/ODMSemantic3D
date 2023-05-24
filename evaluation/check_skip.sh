@@ -7,6 +7,8 @@ TOKEN=$4
 
 COMMENTERS_URL="https://api.github.com/repos/$REPO_FULLNAME/issues/$ISSUE_NUMBER/comments"
 
+echo "Commenters URL: $COMMENTERS_URL"
+
 # Get the commenters who have written '!skip'
 commenters_res=$(curl -s -H "Authorization: Bearer $TOKEN" \
                      -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -24,6 +26,8 @@ ORG_NAME=$(echo $REPO_FULLNAME | cut -f1 -d"/")
 echo "Org name: $ORG_NAME"
 
 TEAM_MEMBERS_URL="https://api.github.com/orgs/$ORG_NAME/teams/$TEAM_SLUG/members"
+
+echo "Team members URL: $TEAM_MEMBERS_URL"
 
 # Get the list of maintainers and developers
 team_members_res=$(curl -s -H "Authorization: Bearer $TOKEN" \
