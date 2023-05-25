@@ -6,7 +6,7 @@ The resulting models are used to improve the automated classifier in [ODM](https
 
 ## Contribute a point cloud
 
-We recommend to process an image dataset with [ODM](https://github.com/OpenDroneMap/ODM) or [WebODM](https://github.com/OpenDroneMap/WebODM) and turn on the `pc-classify` option, which will automatically attempt to assign classification values to a point cloud. It's easier than starting from scratch. 
+We recommend to process an image dataset with [ODM](https://github.com/OpenDroneMap/ODM) or [WebODM](https://github.com/OpenDroneMap/WebODM) and turn on the `pc-classify` option, which will automatically assign classification values to a point cloud. Some will be incorrect, but it's easier than starting from scratch. 
 
 Once you have generated a point cloud (`odm_georeferenced_model.laz`), you can import it in [CloudCompare](https://www.danielgm.net/cc/). **Use the latest stable release, not the alpha versions**.
 
