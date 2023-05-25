@@ -2,6 +2,8 @@
 
 Datasets are automatically trained and evaluated with [OpenPointClass](https://github.com/uav4geo/OpenPointClass) and the latest AI models can be downloaded from the [releases](https://github.com/OpenDroneMap/ODMSemantic3D/releases) page.
 
+The resulting models are used to improve the automated classifier in [ODM](https://github.com/OpenDroneMap/ODM).
+
 ## Contribute a point cloud
 
 We recommend to process an image dataset with [ODM](https://github.com/OpenDroneMap/ODM) or [WebODM](https://github.com/OpenDroneMap/WebODM) and turn on the `pc-classify` option, which will automatically attempt to assign classification values to a point cloud. It's easier than starting from scratch. 
