@@ -21,7 +21,7 @@ If you are starting from an unclassified point cloud you can initialize the clas
 
 - Draw a polygon around the points you want to classify. Right click closes the polygon.
 
-- Press C to assign [ASPRS LAS codes](https://github.com/uav4geo/OpenPointClass#supported-classes):
+- Press **C** to assign [ASPRS LAS codes](https://github.com/uav4geo/OpenPointClass#supported-classes):
 
 At a minimum, the point cloud should have the following classification codes:
 
