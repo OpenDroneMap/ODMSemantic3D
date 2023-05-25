@@ -115,7 +115,7 @@ def main(filenames):
         baseline_folder_name = baseline_filename.split(folder_separator)[-2]
 
         comparison = compare(baseline_data, target_data)
-        print("\n<details><summary>Comparison for {} (Differences)</summary>\n".format(baseline_folder_name))
+        print("\n<details><summary>{}</summary>\n".format(baseline_folder_name))
         print_table(baseline_data, target_data, comparison)
         print("</details>")
 
