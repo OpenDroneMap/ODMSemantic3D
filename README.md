@@ -30,7 +30,7 @@ At a minimum, the point cloud should have the following classification codes:
 | ground | 2 | Earth's surface such as soil, gravel, or pavement |  |
 | low_vegetation | 3 | Any generic type of vegetation like grass, bushes, shrubs, and trees |
 | building | 6 | Man-made structures such as houses, offices, and industrial buildings |
-| human_made_object | 64 | Any artificial objects not classified as buildings, such as vehicles, street furniture, or power lines |
+| human_made_object | 64 | Any artificial objects not classified as buildings, such as vehicles, street furniture |
 
 ![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
 
