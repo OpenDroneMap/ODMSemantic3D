@@ -36,34 +36,32 @@ def safe_format(value, format_string="{:.2%}"):
 
 def print_table(baseline_data, target_data, data):
 
-    print("\n  Accuracy: {:.2%} vs {:.2%}".format(
+    print("\n  Overall accuracy from {:.2%} to {:.2%}".format(
         baseline_data["accuracy"], target_data["accuracy"]))
-    print("\n |               Label  |   Accuracy |     Recall |  Precision |         F1 |")
-    print(" | -------------------- | ---------- | ---------- | ---------- | ---------- |")
 
-    all_labels = set(baseline_data["labels"].keys()) | set(
-        target_data["labels"].keys())
+
+    all_labels = set(baseline_data["labels"].keys()) | set(target_data["labels"].keys())
     for label in all_labels:
 
-        d = data["labels"][label]
+        print("\n | {:^20} | Accuracy |   Recall | Precision |    F1    |".format(label))
+        print(" | {:^20} | -------- | -------- | --------- | -------- |".format("-" * 20))
 
         if label in baseline_data["labels"] and label in target_data["labels"]:
-
             bd = baseline_data["labels"][label]
             td = target_data["labels"][label]
+            d = data["labels"][label]
 
-            print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                safe_format(bd["accuracy"]), safe_format(bd["recall"]), safe_format(bd["precision"]), safe_format(bd["f1"], "{:.2f}")))
-            print(" | {:20} | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                label, safe_format(td["accuracy"]), safe_format(td["recall"]), safe_format(td["precision"]), safe_format(td["f1"], "{:.2f}")))
-            print(" |                      | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
+            print(" | {:20} | {:>8} | {:>8} | {:>9} | {:>8} |".format(
+                "Before", safe_format(bd["accuracy"]), safe_format(bd["recall"]), safe_format(bd["precision"]), safe_format(bd["f1"], "{:.2f}")))
+            print(" | {:20} | {:>8} | {:>8} | {:>9} | {:>8} |".format(
+                "After", safe_format(td["accuracy"]), safe_format(td["recall"]), safe_format(td["precision"]), safe_format(td["f1"], "{:.2f}")))
+            print(" | {:20} | {:>8} | {:>8} | {:>9} | {:>8} |".format(
+                "Diff", safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
+
         else:
-            print(" | {:20} | {:>10} | {:>10} | {:>10} | {:>10} |".format(
-                label, safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
-
-        print(
-            " |                      |            |            |            |            |")
+            d = data["labels"][label]
+            print(" | {:^20} | {:>8} | {:>8} | {:>9} | {:>8} |".format(
+                "Single", safe_format(d["accuracy"]), safe_format(d["recall"]), safe_format(d["precision"]), safe_format(d["f1"], "{:.2f}")))
 
 
 def compare(baseline, target):
@@ -115,7 +113,7 @@ def main(filenames):
         baseline_folder_name = baseline_filename.split(folder_separator)[-2]
 
         comparison = compare(baseline_data, target_data)
-        print("\n<details><summary>Comparison for {} (Differences)</summary>\n".format(baseline_folder_name))
+        print("\n<details><summary>{}</summary>\n".format(baseline_folder_name))
         print_table(baseline_data, target_data, comparison)
         print("</details>")
 

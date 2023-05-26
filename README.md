@@ -1,39 +1,45 @@
-# ODMSemantic3D
-Open dataset of classified 3D points for semantic segmentation
+# ODMSemantic3D - An open photogrammetry dataset of classified 3D point clouds for automated semantic segmentation
 
-This repository contains the classified point clouds for training the OpenPointClass model. You can download the latest built model in the releases page.
+Datasets are automatically trained and evaluated with [OpenPointClass](https://github.com/uav4geo/OpenPointClass) and the latest AI models can be downloaded from the [releases](https://github.com/OpenDroneMap/ODMSemantic3D/releases) page.
 
-## Classify your own point cloud
+The resulting models are used to improve the automated classifier in [ODM](https://github.com/OpenDroneMap/ODM).
 
-You can easily classify your own point cloud using [CloudCompare](https://www.danielgm.net/cc/). To do so, you need to follow the next steps:
-- Open your point cloud in CloudCompare
-- Check for field `Properties > Scalar field > Classification`. Otherwise you can add it by going to `Edit > Add scalar field > Classification`
+## Contribute a point cloud
+
+We recommend to process an image dataset with [ODM](https://github.com/OpenDroneMap/ODM) or [WebODM](https://github.com/OpenDroneMap/WebODM) and turn on the `pc-classify` option, which will automatically assign classification values to a point cloud. Some will be incorrect, but it's easier than starting from scratch. 
+
+Once you have generated a point cloud (`odm_georeferenced_model.laz`), you can import it in [CloudCompare](https://www.danielgm.net/cc/). **Use the latest stable release, not the alpha versions**.
+
+Then:
+- Select `Properties > Scalar field > Classification`.
+
+If you are starting from an unclassified point cloud you can initialize the classification values by going to `Edit > Add scalar field > Classification`
 
 ![add-scalar-field](https://user-images.githubusercontent.com/7868983/235640470-5986f162-4adf-45db-934e-cc8fe65c5a9b.gif)
 
-- Start classifying by going to `Edit > Segment` (or just press T)
+- Start classifying/cleaning the point cloud by going to `Edit > Segment` (press **T**)
 
-- Create a polygon you want to classify. Right click to close it.
+- Draw a polygon around the points you want to classify. Right click closes the polygon.
 
-- Press C to assign one of these classes:
+- Press **C** to assign [ASPRS LAS codes](https://github.com/uav4geo/OpenPointClass#supported-classes):
+
+At a minimum, the point cloud should have the following classification codes:
 
 | Class | Number | Description |
 --------|---------|-------------|
 | ground | 2 | Earth's surface such as soil, gravel, or pavement |  |
 | low_vegetation | 3 | Any generic type of vegetation like grass, bushes, shrubs, and trees |
 | building | 6 | Man-made structures such as houses, offices, and industrial buildings |
-| human_made_object | 64 | Any artificial objects not classified as buildings, such as vehicles, street furniture, or power lines |
-
-For the full list of classes, check [this link](https://github.com/uav4geo/OpenPointClass#supported-classes).
+| human_made_object | 64 | Any artificial objects not classified as buildings, such as vehicles, street furniture |
 
 ![classify-proc](https://user-images.githubusercontent.com/7868983/235640600-f683affb-ddfc-4a71-888e-479465d29be8.gif)
 
-- Once you are done, you can export the point cloud by going to `File > Save as...` and selecting the `.laz` format (not version 1.3 or 1.4)
+- When you are done, you can export the point cloud by going to `File > Save as...` and selecting the `.laz` format. Select **LAZ version 1.2** when exporting the file to .laz (not 1.3 or 1.4, which have issues with CloudCompare).
 
+### Open a pull request
 
+You can contribute to this repository by adding new point clouds. They will be automatically evaluated and trained for you! To do so, you need to follow these steps:
 
-## Contribute
-You can contribute to this repository by adding new point clouds. To do so, you need to follow these steps:
 - [Register on github.com](https://github.com/signup) (if you haven't already)
 - Open the [ODMSemantic3D repository](https://github.com/OpenDroneMap/ODMSemantic3D)
 - Click on the **Fork** button in the top right corner
@@ -52,7 +58,7 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 
 ![upload-files](https://user-images.githubusercontent.com/7868983/236491752-461552fa-0560-4c0f-b8df-515c5b930a40.png)
 
-- Upload the classified point cloud (supported formats are `.las`, `.laz` and `.ply`) by tragging them to the upload area or by clicking on `choose your files`.
+- Upload the classified point cloud (.laz` only) by dragging them to the upload area or by clicking on `choose your files`.
 - Describe the point cloud you are adding in the **commit message** field and select `Create a new branch`, then click on `Commit changes`
 
 ![commit-changes](https://user-images.githubusercontent.com/7868983/236492735-6b6e2fe2-abee-46cb-9627-d05134c29f11.png)
@@ -61,9 +67,10 @@ You can contribute to this repository by adding new point clouds. To do so, you 
 
 ![create-pull-request](https://user-images.githubusercontent.com/7868983/236492950-779cc623-44ed-44ae-b8d9-bf468e0d07b9.png)
 
-- Github will run the training automatically and will post the statistics in the pull request as a comment.
-- If the PR is accepted, the point cloud will be added to the repository and a new release of the model will be created.
+- Github will run the training automatically and will post evaluation statistics in the pull request as a comment.
+
+- If the PR is accepted, the point cloud will be added to the repository and the new model will be published in a new release.
 
 ## Citation
 
-> *OpenDroneMap Authors*: ODMSemantic3D - Open dataset of classified 3D points for semantic segmentation. <https://github.com/OpenDroneMap/ODMSemantic3D>
+> *OpenDroneMap Contributors*: ODMSemantic3D - An open photogrammetry dataset of classified 3D point clouds for automated semantic segmentation. <https://github.com/OpenDroneMap/ODMSemantic3D>
