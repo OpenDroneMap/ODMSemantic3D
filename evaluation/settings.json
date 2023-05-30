@@ -2,7 +2,9 @@
     "scales": 6,
     "resolution": 0.2,
     "radius": 0.6,
-    "training_set": [],
+    "training_set": [
+        "datasets/walter.laz"
+    ],
     "training_classes": [
         2,
         3,
