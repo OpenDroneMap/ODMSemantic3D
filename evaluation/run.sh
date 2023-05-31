@@ -52,13 +52,11 @@ TRAINING_SET=$(echo $TRAINING_SET | tr -d '[]' | tr -d ' ' | tr ',' ' ')
 
 # Merge the two lists
 DATASET_FILES="$DATASET_FILES $TRAINING_SET"
-
 echo "New training set: $DATASET_FILES"
 
 # List all the point cloud files in the datasets repository
-DATASET_FILES=$(find datasets -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
-
-echo "All datasets: $DATASET_FILES"
+ALL_DATASETS=$(find datasets -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
+echo "All datasets: $ALL_DATASETS"
 
 # Convert the list of training classes to a comma separated string
 TRAINING_CLASSES=$(echo $TRAINING_CLASSES | tr -d '[]' | tr -d ' ')
