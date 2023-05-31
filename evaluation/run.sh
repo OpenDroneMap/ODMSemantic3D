@@ -58,6 +58,10 @@ echo "New training set: $DATASET_FILES"
 # Convert the list of training classes to a comma separated string
 TRAINING_CLASSES=$(echo $TRAINING_CLASSES | tr -d '[]' | tr -d ' ')
 
+PCTRAIN_COMMAND="./pctrain --classifier gbt --scales $SCALES --resolution $RESOLUTION --radius $RADIUS --output model.bin --classes $TRAINING_CLASSES $DATASET_FILES"
+
+echo "Running: $PCTRAIN_COMMAND"
+
 # Execute pctrain on all point clouds with the provided settings
 ./pctrain --classifier gbt --scales $SCALES --resolution $RESOLUTION --radius $RADIUS --output model.bin --classes $TRAINING_CLASSES $DATASET_FILES
 
