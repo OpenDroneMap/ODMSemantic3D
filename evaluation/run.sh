@@ -37,9 +37,6 @@ echo "TRAINING_CLASSES: $TRAINING_CLASSES"
 # Get the list of all added or edited point cloud file paths in the datasets repository excluding the ground-truth folder
 DATASET_FILES=$(git diff --name-only --diff-filter=AMR $BASE_SHA..$HEAD_SHA -- '*.laz' '*.las' '*.ply' | grep -v "ground-truth")
 
-# Make sure all the paths are surrounded by quotes
-DATASET_FILES=$(echo $DATASET_FILES | sed 's/\(.*\)/"\1"/')
-
 echo "New or edited files: $DATASET_FILES"
 
 # Get the training_set array from settings.json and merge with the list of all added or edited point cloud file paths
@@ -48,7 +45,7 @@ TRAINING_SET=$(jq '.training_set' evaluation/settings.json)
 echo "Training set: $TRAINING_SET"
 
 # Convert the list of training set files to a space separated string
-TRAINING_SET=$(echo $TRAINING_SET | tr -d '[]' | tr -d ' ' | tr ',' ' ')
+TRAINING_SET=$(echo $TRAINING_SET | tr -d '[]' | tr -d ' ' | tr ',' ' '| tr -d '"')
 
 # Merge the two lists
 DATASET_FILES="$DATASET_FILES $TRAINING_SET"
