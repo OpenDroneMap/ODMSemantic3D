@@ -55,6 +55,11 @@ DATASET_FILES="$DATASET_FILES $TRAINING_SET"
 
 echo "New training set: $DATASET_FILES"
 
+# List all the point cloud files in the datasets repository
+DATASET_FILES=$(find datasets -type f -iname "*.laz" -o -iname "*.las" -o -iname "*.ply")
+
+echo "All datasets: $DATASET_FILES"
+
 # Convert the list of training classes to a comma separated string
 TRAINING_CLASSES=$(echo $TRAINING_CLASSES | tr -d '[]' | tr -d ' ')
 
