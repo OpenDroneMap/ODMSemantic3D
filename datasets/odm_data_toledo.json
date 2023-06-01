@@ -1,0 +1,11 @@
+{
+    "source": "https://hub.dronedb.app/r/odm/toledo",
+    "classification": {
+        "2": "ground",
+        "3": "low_vegetation",
+        "6": "building",
+        "11": "ground",
+        "64": "human_made_object",
+		"67": "human_made_object"
+    }
+}
