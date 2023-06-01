@@ -4,7 +4,8 @@
     "radius": 0.6,
     "training_set": [
         "datasets/walter.laz",
-        "datasets/drone_dataset_sheffield_park_1.laz"
+        "datasets/drone_dataset_sheffield_park_1.laz",
+        "datasets/odm_data_aukerman-roads.laz"
     ],
     "training_classes": [
         2,
