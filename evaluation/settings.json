@@ -7,7 +7,13 @@
         "datasets/drone_dataset_sheffield_park_1.laz",
         "datasets/odm_data_aukerman-roads.laz",
         "datasets/drone_dataset_jwcate-roads.laz",
-        "datasets/odm_wietrznia-sampled-0_7.laz"
+        "datasets/odm_wietrznia-sampled-0_7.laz",
+        "datasets/drone_dataset_jwcate-roads.laz",
+        "datasets/drone_dataset_sheffield_park_1.laz",
+        "datasets/odm_data_aukerman-roads.laz",
+        "datasets/odm_data_toledo.laz",
+        "datasets/odm_wietrznia-sampled-0_7.laz",
+        "datasets/walter.laz"
     ],
     "training_classes": [
         2,
