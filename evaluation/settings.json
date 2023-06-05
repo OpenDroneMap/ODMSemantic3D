@@ -13,7 +13,9 @@
         "datasets/odm_data_aukerman-roads.laz",
         "datasets/odm_data_toledo.laz",
         "datasets/odm_wietrznia-sampled-0_7.laz",
-        "datasets/walter.laz"
+        "datasets/walter.laz",
+        "datasets/odm_data_waterbury-roads_1.laz",
+        "datasets/odm_data_waterbury-roads_2.laz"
     ],
     "training_classes": [
         2,
