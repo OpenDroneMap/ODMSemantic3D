@@ -1,0 +1,15 @@
+[
+    "odm_data_waterbury-roads.laz",
+    {
+        "type":"filters.voxelcentroidnearestneighbor",
+        "cell":0.10
+    },
+    {
+        "type":"filters.assign",
+        "value": "Classification = 64 WHERE Classification==67"
+    },
+    {
+        "type":"writers.las",
+        "filename":"odm_data_waterbury-roads-fix-2.laz"
+    }
+]
