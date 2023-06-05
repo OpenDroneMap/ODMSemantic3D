@@ -49,6 +49,10 @@ TRAINING_SET=$(echo $TRAINING_SET | tr -d '[]' | tr -d ' ' | tr ',' ' '| tr -d '
 
 # Merge the two lists
 DATASET_FILES="$DATASET_FILES $TRAINING_SET"
+
+# Remove duplicates
+DATASET_FILES=$(echo $DATASET_FILES | tr ' ' '\n' | sort -u | tr '\n' ' ')
+
 echo "New training set: $DATASET_FILES"
 
 # List all the point cloud files in the datasets repository
