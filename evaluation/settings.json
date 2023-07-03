@@ -15,7 +15,8 @@
         "datasets/odm_wietrznia-sampled-0_7.laz",
         "datasets/walter.laz",
         "datasets/odm_data_waterbury-roads_1.laz",
-        "datasets/odm_data_waterbury-roads_2.laz"
+        "datasets/odm_data_waterbury-roads_2.laz",
+        "datasets/kadluby_0_1.laz"
     ],
     "training_classes": [
         2,
